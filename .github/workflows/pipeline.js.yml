@@ -7,8 +7,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build:
-
+  build_and_test:
     runs-on: ubuntu-latest
     steps:
     - name: Print Softuni Username
@@ -24,3 +23,13 @@ jobs:
       run: npm install
     - name: Run Unit Tests  
       run: npm run test:unit
+
+  deploy:
+    needs: build_and_test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: JorgeLNJunior/render-deploy@v1.4.4
+        with:
+          service_id: ${{ secrets.RENDER_SERVICE_ID }}
+          api_key: ${{ secrets.RENDER_API_KEY }}
+          wait_deploy: true 
